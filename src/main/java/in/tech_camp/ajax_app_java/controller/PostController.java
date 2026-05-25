@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import org.springframework.http.ResponseEntity;
 import in.tech_camp.ajax_app_java.entity.PostEntity;
 import in.tech_camp.ajax_app_java.form.PostForm;
 import in.tech_camp.ajax_app_java.repository.PostRepository;
@@ -30,13 +31,15 @@ public class PostController {
   //     return "posts/postForm";
   // }
 
-  @PostMapping("/posts")
-  public String savePost(@ModelAttribute("postForm") PostForm form){
+@PostMapping("/posts")
+  public ResponseEntity<PostEntity> savePost(@ModelAttribute("postForm") PostForm form){
     // System.out.println("メソッド呼び出し：" + form);
     PostEntity post = new PostEntity();
     post.setContent(form.getContent());
     postRepository.insert(post);
-    return "redirect:/";
-  }
+    PostEntity resultPost = postRepository.findById(post.getId());
+    // System.out.println(resultpost);
+    return ResponseEntity.ok(resultPost);
+}
   
 }
